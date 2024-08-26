@@ -1,0 +1,88 @@
+
+.top{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(to right, #e6072c, rgb(238, 197, 13), #ff0000);
+}
+.msgs{
+    width: 99vw;
+    height: 80vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.msg{
+    background-color: #333333;
+    color: white;
+    width: 30%;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 22px;
+}
+.inc-left{
+    float: left;
+    clear: both;
+}
+.out-right{
+    float: right;
+    clear: both;
+}
+.send-msg{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    height: 40px;
+    margin: 30px;
+}
+#send-form{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+#mesginp{
+    width: 60vw;
+    height: 30px;
+    border-radius: 20px 0px 0px 20px;
+    border: 1px solid black;
+}
+#sendbtn{
+    margin-top: 1px;
+    height: 31px;
+    border-radius: 0px 20px 20px 0px;
+    border: 1px;
+}
+#after{
+    display: none;
+}
+#before{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+   
+}
+#name{
+    height: 40px;
+    width: 50vw;
+    border-radius: 25px;
+    border :1px;
+    display: block;
+    margin: 20px;
+}
+#n-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20vh;
+}
+.sub-name{
+    height: 30px;
+    width: 70px;
+    border: 1px;
+    border-radius: 10px;
+}
