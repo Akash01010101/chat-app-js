@@ -1,5 +1,5 @@
 
-const socket = io("http://localhost:8000");
+const socket = io("http://proactive-enthusiasm-production.up.railway.app:8000");
 const form = document.getElementById("send-form");
 const msginp = document.getElementById("mesginp");
 const msgcontainer = document.querySelector(".msgs");
