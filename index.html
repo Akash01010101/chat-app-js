@@ -1,33 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat app socket io</title>
-    <script src="https://proactive-enthusiasm-production.up.railway.app/socket.io/socket.io.js"></script>
-    <script defer src="client.js"></script>
-    <link rel="stylesheet" href="style.css" />
- 
-  </head>
-  <body>
-  <div id="after">  <div class="top"><h1>Global chat</h1></div>
-  <div class="msgs">
-    <div class="msg inc-left">Hey</div>
-    <div class="msg out-right">how are you</div>
-
-  </div>
-  <div class="send-msg">
-    <form action="" id="send-form">
-      <input type="text" name="mesginp" id="mesginp" required/>
-      <button type="submit" id="sendbtn">Send</button>
-    </form></div>
-    </div>
-    <div id="before">
-      <div class="formx"><form action="" id="n-form">
-        <h1>Enter name</h1>
-        <input type="text" name="name" id="name" required>
-        <button type="submit" class="sub-name">Submit</button>
-      </form></div>
-    </div>
-  </body>
+<!DOCTYPE html>  
+<html lang="en">  
+  <head>  
+    <meta charset="UTF-8" />  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+    <title>Chat app socket io</title>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>  
+    <script defer src="client.js"></script>  
+    <link rel="stylesheet" href="style.css" />  
+  </head>  
+  <body>  
+    <div id="after">  
+      <div class="top"><h1>Global chat</h1></div>  
+      <div class="msgs"></div>  
+      <div class="send-msg">  
+        <form id="send-form">  
+          <input type="text" name="mesginp" id="mesginp" required />  
+          <button type="submit" id="sendbtn">Send</button>  
+        </form>  
+      </div>  
+    </div>  
+    <div id="before">  
+      <div class="formx">  
+        <form id="n-form"> <!-- Removed action attribute -->  
+          <h1>Enter name</h1>  
+          <input type="text" name="name" id="name" required />  
+          <button type="submit" class="sub-name">Submit</button>  
+        </form>  
+      </div>  
+    </div>  
+  </body>  
 </html>
