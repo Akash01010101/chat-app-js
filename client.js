@@ -1,11 +1,9 @@
 const socket = io("http://192.168.0.106:8000");
-
 const msgcontainer = document.querySelector(".msgs");
 const form = document.getElementById("send-form");
 const msginp = document.getElementById("mesginp");
 const nform = document.getElementById("n-form");
 const name1 = document.getElementById("name");
-console.log(window.innerWidth);
 
 function appendmsg(message, pos) {
   const msg_element = document.createElement("div");
@@ -16,7 +14,7 @@ function appendmsg(message, pos) {
 }
 
 nform.addEventListener("submit", (e) => {
-  console.log("Name Form Submitted");
+ 
   e.preventDefault();
   const name = name1.value;
   socket.emit("user-joined", name);
@@ -36,7 +34,6 @@ nform.addEventListener("submit", (e) => {
       }
     });
   });
-  console.log("User Joined: ", name);
   socket.on("user-joined1", (name) => {
     appendmsg(`${name} has joined`, "inc-left");
   });
@@ -50,7 +47,6 @@ socket.on("recieve", (data) => {
 });
 
 form.addEventListener("submit", (e) => {
-  console.log("Send Form Submitted");
   e.preventDefault(); 
   const msg = msginp.value.trim(); 
   if (msg) {

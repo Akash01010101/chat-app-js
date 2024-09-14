@@ -34,7 +34,6 @@ io.on("connection", (socket) => {
       else {
         userName = name;  
         currentUsers.push(name)
-        console.log(currentUsers)
         socket.emit("load-chat-history", chatHistory,bufferedMessages);   
         number++
         socket.broadcast.emit("user-joined1", userName);
@@ -48,7 +47,6 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {   
         number--
         currentUsers = currentUsers.filter( x => x !== userName)
-        console.log(currentUsers)
         saveMessages();  
     });  
     
@@ -58,9 +56,7 @@ function saveMessages() {
         try {  
             chatHistory = chatHistory.concat(bufferedMessages);  
             fs.writeFileSync(messageFilePath, JSON.stringify(chatHistory, null, 4));  
-            console.log("Messages saved successfully.");  
             bufferedMessages = [];  
-            console.log("cleared")
         } catch (error) {  
             console.error("Error saving messages:", error);    
         }
@@ -70,6 +66,6 @@ process.on('SIGINT', () => {
     saveMessages(); 
     process.exit();  
 });  
-server.listen(8000, () => {  
+server.listen(process.env.PORT||8000, () => {  
     console.log("Server is listening on port 8000");  
 });
