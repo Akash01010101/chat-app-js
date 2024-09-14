@@ -1,45 +1,51 @@
+const express = require("express");  
+const http = require("http");  
+const socketIo = require("socket.io");  
+const cors = require("cors");  
 const fs = require("fs");  
-const path = require("path");  
-const io = require("socket.io")(8000, {  
+
+const app = express();  
+const server = http.createServer(app);  
+const io = socketIo(server, {  
     cors: {  
-        origin: "*",  
+        origin: "http://192.168.0.106:5500",  
         methods: ["GET", "POST"],  
-        allowedHeaders: "*",  
-        credentials: false,  
+        allowedHeaders: ["my-custom-header"],  
+        credentials: true,  
     },  
-});
-function loadChatHistory() {  
-    const filePath = path.join(__dirname, "chatHistory.json");  
-    if (fs.existsSync(filePath)) {  
-        const data = fs.readFileSync(filePath, "utf8");  
-        return JSON.parse(data);  
-    }  
-    return [];  
-}
-function saveChatMessage(message) {  
-    const filePath = path.join(__dirname, "chatHistory.json");  
-    const chatHistory = loadChatHistory();  
-    chatHistory.push(message);  
-    fs.writeFileSync(filePath, JSON.stringify(chatHistory, null, 2));  
+});  
+ 
+const messageFilePath = "messages.json";  
+
+let chatHistory = [];  
+
+if (fs.existsSync(messageFilePath)) {  
+    const rawData = fs.readFileSync(messageFilePath);  
+    chatHistory = JSON.parse(rawData);  
 }  
 io.on("connection", (socket) => {  
-    console.log("New user connected"); 
-    const chatHistory = loadChatHistory();  
+    let userName;  
+    const tempMessages = []; 
     socket.emit("load-chat-history", chatHistory);  
     socket.on("user-joined", (name) => {  
-        socket.username = name; 
-        console.log(`${name} has joined`);  
-    }); 
-    socket.on("msg-send", (msg) => {  
-        const messageData = {  
-            name: socket.username || "Anonymous",  
-            message: msg,  
-            timestamp: new Date(),  
-        };  
-        saveChatMessage(messageData); 
-        socket.broadcast.emit("recieve", messageData); 
-    });
-    socket.on("disconnect", () => {  
-        console.log(`${socket.username} has disconnected`);  
+        userName = name;  
+        socket.broadcast.emit("user-joined1", userName);  
     });  
+    socket.on("msg-send", (msg) => {  
+        const messageData = { name: userName, message: msg };  
+        tempMessages.push(messageData);
+        socket.broadcast.emit("recieve", messageData);  
+    });  
+    socket.on("disconnect", () => {  
+        chatHistory.push(...tempMessages);  
+        saveMessages(); 
+    });  
+});  
+ 
+function saveMessages() {  
+    fs.writeFileSync(messageFilePath, JSON.stringify(chatHistory, null, 4));  
+}  
+
+server.listen(8000, () => {  
+    console.log("Server is listening on port 8000");  
 });
