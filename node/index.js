@@ -6,6 +6,11 @@ const fs = require("fs");
 
 const app = express();  
 const server = http.createServer(app);  
+
+app.get('/home', (req, res) => {
+    res.send('<h1>Welcome to the Home Page!</h1><p>This is a simple route added to the Express server.</p>');
+});
+
 const io = socketIo(server, {  
     cors: {  
         origin: "http://192.168.0.106:5500",  
