@@ -16,6 +16,7 @@ const io = socketIo(server, {
 });  
 const messageFilePath = "messages.json";  
 let chatHistory = [];  
+let currentUsers = [];
 if (fs.existsSync(messageFilePath)) {  
     const rawData = fs.readFileSync(messageFilePath);  
     chatHistory = JSON.parse(rawData);  
@@ -25,11 +26,19 @@ let bufferedMessages = [];
 
 io.on("connection", (socket) => {  
     let userName;  
-    socket.emit("load-chat-history", chatHistory,bufferedMessages);  
-    socket.on("user-joined", (name) => {  
+    socket.on("user-joined", (name) => { 
+        if(currentUsers.includes(name)){
+            const err = "already exists"
+            socket.emit("error",err)
+        }
+      else {
         userName = name;  
+        currentUsers.push(name)
+        console.log(currentUsers)
+        socket.emit("load-chat-history", chatHistory,bufferedMessages);   
         number++
-        socket.broadcast.emit("user-joined1", userName);  
+        socket.broadcast.emit("user-joined1", userName);
+      }  
     });  
     socket.on("msg-send", (msg) => {  
         const messageData = { name: userName, message: msg };  
@@ -38,8 +47,11 @@ io.on("connection", (socket) => {
     });  
     socket.on("disconnect", () => {   
         number--
-        saveMessages();
+        currentUsers = currentUsers.filter( x => x !== userName)
+        console.log(currentUsers)
+        saveMessages();  
     });  
+    
 });  
 function saveMessages() {  
     if (number == 0){
@@ -47,8 +59,8 @@ function saveMessages() {
             chatHistory = chatHistory.concat(bufferedMessages);  
             fs.writeFileSync(messageFilePath, JSON.stringify(chatHistory, null, 4));  
             console.log("Messages saved successfully.");  
-    
             bufferedMessages = [];  
+            console.log("cleared")
         } catch (error) {  
             console.error("Error saving messages:", error);    
         }
