@@ -1,4 +1,4 @@
-const socket = io("http://192.168.0.106:8000");
+const socket = io(); 
 const msgcontainer = document.querySelector(".msgs");
 const form = document.getElementById("send-form");
 const msginp = document.getElementById("mesginp");
@@ -11,6 +11,10 @@ function appendmsg(message, pos) {
   msg_element.classList.add("msg");
   msg_element.classList.add(pos);
   msgcontainer.append(msg_element);
+}
+
+window.onload = function(){
+  document.getElementById("name").focus();
 }
 
 nform.addEventListener("submit", (e) => {

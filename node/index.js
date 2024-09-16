@@ -3,13 +3,15 @@ const http = require("http");
 const socketIo = require("socket.io");  
 const cors = require("cors");  
 const fs = require("fs");  
+const path = require("path");  
 
 const app = express();  
 const server = http.createServer(app);  
+app.use(express.static(path.join(__dirname, '../front')));  
 
-app.get('/home', (req, res) => {
-    res.send('<h1>Welcome to the Home Page!</h1><p>This is a simple route added to the Express server.</p>');
-});
+app.get('/home', (req, res) => {  
+    res.send('<h1>Welcome to the Home Page!</h1><p>This is a simple route added to the Express server.</p>');  
+});  
 
 const io = socketIo(server, {  
     cors: {  
@@ -18,7 +20,7 @@ const io = socketIo(server, {
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'X-Custom-Header'],  
         credentials: true,  
     },  
-});  
+}); 
 const messageFilePath = "messages.json";  
 let chatHistory = [];  
 let currentUsers = [];
@@ -38,6 +40,7 @@ io.on("connection", (socket) => {
         }
       else {
         userName = name.trim();  
+        console.log("connect ",userName)
         currentUsers.push(name)
         socket.emit("load-chat-history", chatHistory,bufferedMessages);   
         number++
@@ -45,18 +48,24 @@ io.on("connection", (socket) => {
       }  
     });  
     socket.on("msg-send", (msg) => {  
-        const messageData = { name: userName, message: msg };  
-        bufferedMessages.push(messageData);   
-        socket.broadcast.emit("recieve", messageData);  
+        if(userName) { 
+            const messageData = { name: userName, message: msg };
+            bufferedMessages.push(messageData);   
+            socket.broadcast.emit("recieve", messageData); 
+         } else { 
+            socket.emit("userNameerr")
+          }
+         
     });  
     socket.on("disconnect", () => {   
         number--
         currentUsers = currentUsers.filter( x => x !== userName)
         saveMessages();  
+        console.log("disconnect",userName)
     });  
     
 });  
-function saveMessages() {  
+function saveMessages() { 
     if (number == 0){
         try {  
             chatHistory = chatHistory.concat(bufferedMessages);  
@@ -71,6 +80,6 @@ process.on('SIGINT', () => {
     saveMessages(); 
     process.exit();  
 });  
-server.listen(process.env.PORT||8000, () => {  
+server.listen(process.env.PORT || 8000, () => {  
     console.log("Server is listening on port 8000");  
-});
+});  
