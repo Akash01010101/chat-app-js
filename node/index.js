@@ -13,9 +13,9 @@ app.get('/home', (req, res) => {
 
 const io = socketIo(server, {  
     cors: {  
-        origin: "http://192.168.0.106:5500",  
+        origin: "*",  
         methods: ["GET", "POST"],  
-        allowedHeaders: ["my-custom-header"],  
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'X-Custom-Header'],  
         credentials: true,  
     },  
 });  
@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
             socket.emit("error",err)
         }
       else {
-        userName = name;  
+        userName = name.trim();  
         currentUsers.push(name)
         socket.emit("load-chat-history", chatHistory,bufferedMessages);   
         number++

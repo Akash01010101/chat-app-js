@@ -14,9 +14,8 @@ function appendmsg(message, pos) {
 }
 
 nform.addEventListener("submit", (e) => {
- 
   e.preventDefault();
-  const name = name1.value;
+  const name = name1.value.trim();
   socket.emit("user-joined", name);
   socket.on("load-chat-history", (chatHistory, bufferedMessages) => {
     chatHistory.forEach((data) => {
@@ -33,6 +32,7 @@ nform.addEventListener("submit", (e) => {
         appendmsg(`user : ${data.name} \n ${data.message}`, "inc-left");
       }
     });
+    msgcontainer.scrollTo(0, msgcontainer.scrollHeight);
   });
   socket.on("user-joined1", (name) => {
     appendmsg(`${name} has joined`, "inc-left");
@@ -51,8 +51,8 @@ form.addEventListener("submit", (e) => {
   const msg = msginp.value.trim(); 
   if (msg) {
     appendmsg(`${msg}`, "out-right"); 
-    msgcontainer.scrollTo(0, msgcontainer.scrollHeight);
     socket.emit("msg-send", msg); 
+    msgcontainer.scrollTo(0, msgcontainer.scrollHeight);
     msginp.value = ""; 
   }
 });

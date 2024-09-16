@@ -42,12 +42,11 @@ body {
   width: 100vw;
   display: flex;
   justify-content: center;
-  height: 40px;
+  height: 100px;
   position: fixed;
-
-
   align-items: center;
   padding-top: 25px;
+  bottom:60px;
 }
 #send-form {
   width: 70vw;
@@ -116,4 +115,8 @@ body {
         bottom: 40px;
         height: 60px;
     }
+}
+.send-form{
+  display: flex;
+  justify-content: center;
 }
