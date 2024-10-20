@@ -16,7 +16,14 @@ app.use(session({
 }));  
 
 app.use(express.json());  
-app.use(express.static(path.join(__dirname, '../front/jsc')));  
+app.use((req,res,next)=>{
+    if(req.path == "/chats.html"){
+        res.status(404).send("hhahhahahha")
+    } else {
+        next();
+    }
+})
+app.use(express.static(path.join(__dirname, '../front')));  
 const userFilePath = "users.txt";  
 const loadUsers = () => {  
     if (fs.existsSync(userFilePath)) {  
@@ -81,6 +88,12 @@ app.get('/', (req, res) => {
 app.get('/jsc/client.js', (req, res) => {  
     res.sendFile(path.join(__dirname, '../front/jsc/client.js')); 
 }); 
+app.get('/manifest.json', (req, res) => {  
+    res.sendFile(path.join(__dirname, '../front/manifest.json')); 
+});
+app.get('/icons', (req, res) => {  
+    res.sendFile(path.join(__dirname, '../front/icons')); 
+});
 // Logout route  
 app.post('/logout', (req, res) => {  
     req.session.destroy(err => {  
