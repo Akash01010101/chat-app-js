@@ -56,21 +56,21 @@ app.post('/login', (req, res) => {
     }  
 });  
 
-// Middleware to protect routes  
+
 const isAuthenticated = (req, res, next) => {  
     if (req.session.user) {  
-        next(); // User is authenticated, proceed to the requested route  
+        next(); 
     } else {  
-        res.redirect('/login'); // Redirect to the login page  
+        res.redirect('/login.html'); // Redirect to the login page  
     }  
 };  
 
-// Serve chats.html only if authenticated  
+
 app.get('/chats.html', isAuthenticated, (req, res) => {  
     res.sendFile(path.join(__dirname, '../front/chats.html'));  
 });  
 
-// Serve the login page  
+
 app.get('/login.html', (req, res) => {  
     res.sendFile(path.join(__dirname, '../front/login.html')); // Ensure you have a login.html page  
 });  
@@ -87,7 +87,7 @@ app.post('/logout', (req, res) => {
         if (err) {  
             return res.status(500).json({ error: "Could not log out." });  
         }  
-        res.redirect('/login'); // Redirect to login page after logout  
+        res.redirect('/login.html'); // Redirect to login page after logout  
     });  
 });  
 
