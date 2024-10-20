@@ -128,12 +128,15 @@ io.on("connection", (socket) => {
             socket.emit("error", err);  
         }  
     });  
-    
+    socket.on("change",()=>{
+        socket.emit("load-chat-history", chatHistory, bufferedMessages); 
+    })
     socket.on("msg-send", (msg) => {  
         if (userName == undefined) {  
             socket.emit("userNameerr");  
         } else {  
-            const messageData = { name: userName, message: msg };  
+            const messageData = { name: userName, message: msg.msg , to: msg.to};  
+            console.log(messageData)
             bufferedMessages.push(messageData);  
             socket.broadcast.emit("recieve", messageData);  
         }  
