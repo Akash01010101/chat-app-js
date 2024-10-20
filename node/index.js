@@ -16,10 +16,8 @@ app.use(session({
 }));  
 
 app.use(express.json());  
-app.use(express.static(path.join(__dirname, '../front')));  
-
+app.use(express.static(path.join(__dirname, '../front/jsc')));  
 const userFilePath = "users.txt";  
-
 const loadUsers = () => {  
     if (fs.existsSync(userFilePath)) {  
         const rawData = fs.readFileSync(userFilePath);  
@@ -67,16 +65,22 @@ const isAuthenticated = (req, res, next) => {
     }  
 };  
 
-// Serve index.html only if authenticated  
-app.get('/index.html', isAuthenticated, (req, res) => {  
-    res.sendFile(path.join(__dirname, '../front/index.html'));  
+// Serve chats.html only if authenticated  
+app.get('/chats.html', isAuthenticated, (req, res) => {  
+    res.sendFile(path.join(__dirname, '../front/chats.html'));  
 });  
 
 // Serve the login page  
-app.get('/login', (req, res) => {  
+app.get('/login.html', (req, res) => {  
     res.sendFile(path.join(__dirname, '../front/login.html')); // Ensure you have a login.html page  
 });  
 
+app.get('/', (req, res) => {  
+    res.sendFile(path.join(__dirname, '../front/index.html')); // Ensure you have a login.html page  
+});  
+app.get('/jsc/client.js', (req, res) => {  
+    res.sendFile(path.join(__dirname, '../front/jsc/client.js')); 
+}); 
 // Logout route  
 app.post('/logout', (req, res) => {  
     req.session.destroy(err => {  
@@ -129,7 +133,6 @@ io.on("connection", (socket) => {
         if (userName == undefined) {  
             socket.emit("userNameerr");  
         } else {  
-            console.log(msg);  
             const messageData = { name: userName, message: msg };  
             bufferedMessages.push(messageData);  
             socket.broadcast.emit("recieve", messageData);  
@@ -157,7 +160,7 @@ function saveMessages() {
 }  
 
 process.on('SIGINT', () => {  
-    saveMessages();  
+    saveMessages();   
     process.exit();  
 });  
 
