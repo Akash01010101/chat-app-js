@@ -17,13 +17,21 @@ app.use(session({
 
 app.use(express.json());  
 app.use((req,res,next)=>{
-    if(req.path == "/chats.html"){
+    if(req.path == "/chats.html" && req.session.user == undefined){
         res.status(404).send("hhahhahahha")
     } else {
         next();
     }
 })
-app.use(express.static(path.join(__dirname, '../front')));  
+app.get('/list-files', (req, res) => {  
+    fs.readdir(path.join(__dirname, '../front'), (err, files) => {  
+        if (err) {  
+            return res.status(500).send("Error reading directory");  
+        }  
+        res.send(files);  
+    });  
+});
+app.use(express.static(path.resolve(__dirname, '../front')));
 const userFilePath = "users.txt";  
 const loadUsers = () => {  
     if (fs.existsSync(userFilePath)) {  
@@ -83,7 +91,7 @@ app.get('/login.html', (req, res) => {
 });  
 
 app.get('/', (req, res) => {  
-    res.sendFile(path.join(__dirname, '../front/index.html')); // Ensure you have a login.html page  
+    res.sendFile(path.join(__dirname, '../front/index.html')); 
 });  
 app.get('/jsc/client.js', (req, res) => {  
     res.sendFile(path.join(__dirname, '../front/jsc/client.js')); 
@@ -180,6 +188,6 @@ process.on('SIGINT', () => {
     process.exit();  
 });  
 
-server.listen(process.env.PORT || 8000, "192.168.0.106", () => {  
-    console.log("Server is listening on port 8000");  
+server.listen(process.env.PORT || 8000, '0.0.0.0', () => {  
+    console.log(`Server is listening on port ${process.env.PORT || 8000}`);   
 });
