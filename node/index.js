@@ -189,5 +189,11 @@ process.on('SIGINT', () => {
 });  
 
 server.listen(process.env.PORT || 8000, '0.0.0.0', () => {  
+<<<<<<< HEAD
     console.log(`Server is listening on port ${process.env.PORT || 8000}`);   
 });
+=======
+    console.log(`Server is listening on port ${process.env.PORT || 8000}`);  
+});  
+
+>>>>>>> origin/main
